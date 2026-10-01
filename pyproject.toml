@@ -1,0 +1,22 @@
+[build-system]
+requires=["setuptools==80.10.2", "wheel==0.48.0"]
+build-backend="setuptools.build_meta"
+[project]
+name="tracemeadow"
+version="1.2.8"
+description="TraceMeadow attributed derivative for offline developer analysis"
+readme="README.md"
+requires-python=">=3.9"
+license={file="LICENSE"}
+dependencies=["construct==2.10.70", "Pygments==2.21.0", "click==8.5.0", "termcolor==3.3.0"]
+[project.optional-dependencies]
+test=["pytest"]
+[project.scripts]
+"tracemeadow"="tracemeadow.console:meadow_cli"
+[tool.setuptools.packages.find]
+where=["src"]
+[tool.setuptools.package-data]
+"*"=["*.codes", "data/*.json", "data/*.config"]
+[tool.pytest.ini_options]
+pythonpath=["src"]
+testpaths=["checks"]
