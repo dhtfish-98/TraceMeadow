@@ -16,7 +16,7 @@ from tracemeadow.bounded_stream import TraceFormatError
 
 location = Path(tracemeadow.__file__).resolve()
 assert 'site-packages' in location.parts, location
-assert importlib.metadata.version('tracemeadow') == '1.0.2'
+assert importlib.metadata.version('tracemeadow') == '1.0.3'
 record = meadow_from_kd_buf(bytes([255]) * 64)
 assert record.eventid == 0xfffffffc and record.func_qualifier == 3
 assert repr(record).startswith('Kevent(') and meadow_default_trace_codes()
@@ -40,6 +40,24 @@ events = bytes.fromhex('001e000000000000') + struct.pack('<Q', 64) + bytes(8) + 
 meta = plistlib.dumps({'Processes': []}, fmt=plistlib.FMT_BINARY)
 complete = prefix + events + bytes.fromhex('1080000000000000') + struct.pack('<Q', len(meta)) + meta
 assert len(list(meadow_KdBufParser().meadow_parse(io.BytesIO(complete)))) == 1
+from tracemeadow.stack_stream import meadow_CallstacksParser, meadow_Frame
+from tracemeadow.handlers.performance_events import meadow_PerfEvent
+from tracemeadow.trace_stream import meadow_TracesParser
+sample_source = meadow_from_kd_buf(wire)
+images = meadow_CallstacksParser([], [], max_frames=2)
+images.insert_image(0x1000, None)
+sample = meadow_PerfEvent([sample_source], [], 0, cs_frames=[0x0fff, 0x1004])
+frames = list(images.feed_generator([sample]))[0].frames
+assert frames == [meadow_Frame(0x0fff, None, None), meadow_Frame(0x1004, None, 4)]
+groups = meadow_TracesParser({}, {}, {}, max_groups=1)
+start = sample_source._replace(eventid=4, func_qualifier=1)
+groups.feed(start)
+try:
+    groups.feed(start._replace(eventid=8))
+except TraceFormatError:
+    pass
+else:
+    raise AssertionError('installed aggregation must enforce its pending-group limit')
 with tempfile.TemporaryDirectory(prefix='tracemeadow-consumer-') as folder:
     root = Path(folder)
     good = root / 'owned-v3.bin'; good.write_bytes(complete)

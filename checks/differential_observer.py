@@ -80,6 +80,26 @@ elif case_args.project=='TraceMeadow':
     for case_size in range(0,60):
         case_raw=case_random.randbytes(case_size)
         case_observe(['stream-boundary',case_size],lambda:list(case_stream.KdBufParser().parse(io.BytesIO(case_raw))))
+    case_groups=case_import('pykdebugparser.traces_parser','tracemeadow.trace_stream')
+    case_stacks=case_import('pykdebugparser.callstacks_parser','tracemeadow.stack_stream')
+    case_perf=case_import('pykdebugparser.trace_handlers.perf','tracemeadow.handlers.performance_events')
+    from uuid import UUID as CaseUUID
+    for case_index in range(50):
+        case_group_parser=case_groups.TracesParser({4:'OWNED_A',8:'OWNED_B',12:'OWNED_C'}, {}, {})
+        case_group_parser.handlers.update({name:lambda _,events:[e._asdict() for e in events]
+                                          for name in ['OWNED_A','OWNED_B','OWNED_C']})
+        case_sequence=[]
+        for case_tick in range(32):
+            case_id=case_random.choice([4,8,12]);case_qual=case_random.randrange(4);case_tid=case_random.randrange(1,5)
+            case_sequence.append(case_events.Kevent(case_tick,bytes(32),(0,0,0,0),case_tid,
+                                                   case_id|case_qual,case_id,case_qual))
+        case_observe(['aggregation-owned',case_index],lambda:list(case_group_parser.feed_generator(case_sequence)))
+        case_stack_parser=case_stacks.CallstacksParser([],[])
+        for case_image in range(8):
+            case_stack_parser.insert_image(case_random.randrange(1,16)*0x1000,CaseUUID(int=case_image+1))
+        case_source=case_events.Kevent(case_index,bytes(32),(0,0,0,0),42,0,0,0)
+        case_sample=case_perf.PerfEvent([case_source],[],0,cs_frames=[case_random.randrange(0,0x20000) for _ in range(40)])
+        case_observe(['callstack-owned',case_index],lambda:[c._asdict() for c in case_stack_parser.feed_generator([case_sample])])
 
 else:
     case_original=case_args.variant=='original'

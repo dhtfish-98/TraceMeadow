@@ -19,6 +19,13 @@ for audit_variant,audit_location in [('original',audit_options.upstream_root.res
     audit_observations.append(audit_json.loads(audit_result.stdout))
 audit_old,audit_new=audit_observations
 assert len(audit_old)==len(audit_new),(len(audit_old),len(audit_new))
+for cases in (audit_old,audit_new):
+    added=[row for row in cases if row[0][0] in ('aggregation-owned','callstack-owned')]
+    assert len(added)==100
+    for row in added:
+        assert row[1]=='return' and row[2],row
+        if row[0][0]=='callstack-owned':
+            assert len(row[2])==1 and len(row[2][0]['frames'])==40,row
 audit_differences=[]
 audit_changed_errors=0
 for i,(old,new) in enumerate(zip(audit_old,audit_new)):

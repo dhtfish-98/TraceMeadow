@@ -44,4 +44,14 @@ The source checkout is supplied explicitly; no developer machine paths are embed
 - CLI output is limited to 16 MiB of UTF-8. Metadata JSON encodes bytes as `{"$bytes_hex":"..."}`, datetime values as `{"$datetime":"..."}` and plist UIDs as `{"$plist_uid":n}`. These wrappers do not define an automatic reverse decoder.
 - A positive command count selects only that many records; it does not validate the rest of the stream. Metadata commands consume the whole stream without collecting every event into a list.
 
-The supported v3 framing is the existing upstream dialect, including its two event-size conventions. This does not establish support for every Darwin capture format. Retained event aggregation, syscall interpretation, call-stack and formatting algorithms still require further rewriting and validation. Logs can contain sensitive values and terminal control characters; output does not provide comprehensive redaction or terminal escaping.
+The supported v3 framing is the existing upstream dialect, including its two event-size conventions. This does not establish support for every Darwin capture format. Other retained handler state, syscall interpretation and formatting algorithms still require further rewriting and validation. Logs can contain sensitive values and terminal control characters; output does not provide comprehensive redaction or terminal escaping.
+
+## Aggregation and call-stack behavior in 1.0.3
+
+The event-group state machine and call-stack/image attribution are now substantively rewritten. Defaults limit active groups to 4,096, stored event references to 1,048,576, each group to 65,536 events and processed records to 4,194,304. Group insertion/replacement is checked before mutation; completed empty thread groups are removed. Vnode path assembly uses bounded chunks (1 MiB / 65,536 events) instead of repeated whole-path concatenation. Invalid handler data produces TraceFormatError.
+
+Call-stack defaults limit each sample to 65,536 frames, image tables to 65,536 entries and consumed traces to 4,194,304. Image tables must initially be aligned and sorted; addresses are unsigned 64-bit. Same-address insertions retain the first registered identifier. Attribution still chooses the nearest preceding image base without a proven image extent; these offsets are heuristic candidates.
+
+These limits bound the new group storage and call-stack operations. They do not fully bound other handler-owned maps, caller mutations, all formatting operations or unmatched groups at EOF. Unmatched ends and replacement of an existing same-ID start retain the documented upstream convention. A stream can still contain unresolved groups; successfully exhausting the group iterator is not proof of a complete capture.
+
+Call-stack formatting checks its 16 MiB UTF-8 budget before allocating each indented frame line. This prevents large bounded samples from materializing quadratic-size indentation before the CLI can check output. Other formatters remain within the stated unfinished scope.

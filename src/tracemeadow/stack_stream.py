@@ -7,37 +7,80 @@ from tracemeadow.handlers.image_events import meadow_DyldUuidMapA as meadow_Dyld
 meadow_Callstack = _name_boundary.named_record('Callstack', ['timestamp', 'tid', 'frames'])
 meadow_Frame = _name_boundary.named_record('Frame', ['address', 'uuid', 'offset'])
 
+from tracemeadow.bounded_stream import TraceFormatError
+
 @_name_boundary.class_contract('CallstacksParser', {'feed_generator': 'meadow_feed_generator', 'insert_image': 'meadow_insert_image', 'dyld_addresses': 'meadow_dyld_addresses', 'dyld_uuids': 'meadow_dyld_uuids'})
 class meadow_CallstacksParser:
+    """Bounded nearest-preceding-image attribution; offsets are heuristic candidates."""
 
-    @_name_boundary.callable_contract({'self': 'meadow_self_fa5ae3a', 'dyld_addresses': 'meadow_dyld_addresses_a465635', 'dyld_uuids': 'meadow_dyld_uuids_a8be7e2'}, '__init__')
-    def __init__(meadow_self_fa5ae3a, meadow_dyld_addresses_a465635, meadow_dyld_uuids_a8be7e2):
-        _name_boundary.attributes(meadow_self_fa5ae3a)['dyld_addresses'] = meadow_dyld_addresses_a465635
-        _name_boundary.attributes(meadow_self_fa5ae3a)['dyld_uuids'] = meadow_dyld_uuids_a8be7e2
+    def __init__(self, dyld_addresses, dyld_uuids, *, max_images=65536,
+                 max_frames=65536, max_traces=4194304):
+        for value in (max_images, max_frames, max_traces):
+            if type(value) is not int or value <= 0:
+                raise ValueError('call-stack limits must be positive integers')
+        if not isinstance(dyld_addresses, list) or not isinstance(dyld_uuids, list):
+            raise TraceFormatError('image address and identifier tables must be lists')
+        self._max_images, self._max_frames, self._max_traces = max_images, max_frames, max_traces
+        self.dyld_addresses, self.dyld_uuids = dyld_addresses, dyld_uuids
+        self._check_tables()
+        previous = -1
+        for address in dyld_addresses:
+            self._check_address(address)
+            if address < previous:
+                raise TraceFormatError('image addresses must be sorted')
+            previous = address
 
-    @_name_boundary.callable_contract({'self': 'meadow_self_c45a5c6', 'generator': 'meadow_generator_4517800'}, 'feed_generator')
-    def meadow_feed_generator(meadow_self_c45a5c6, meadow_generator_4517800):
-        for meadow_trace_498c124 in meadow_generator_4517800:
-            if isinstance(meadow_trace_498c124, meadow_PerfEvent) and meadow_trace_498c124.cs_frames is not None:
-                meadow_frames_dec8c76 = []
-                for meadow_frame_be113fb in meadow_trace_498c124.cs_frames:
-                    meadow_index__4ec998d = meadow_bisect(_name_boundary.attributes(meadow_self_c45a5c6)['dyld_addresses'], meadow_frame_be113fb) - 1
-                    if meadow_index__4ec998d > -1:
-                        meadow_frames_dec8c76.append(meadow_Frame(meadow_frame_be113fb, _name_boundary.attributes(meadow_self_c45a5c6)['dyld_uuids'][meadow_index__4ec998d], meadow_frame_be113fb - _name_boundary.attributes(meadow_self_c45a5c6)['dyld_addresses'][meadow_index__4ec998d]))
-                    else:
-                        meadow_frames_dec8c76.append(meadow_Frame(meadow_frame_be113fb, None, None))
-                yield meadow_Callstack(meadow_trace_498c124.ktraces[0].timestamp, meadow_trace_498c124.ktraces[0].tid, meadow_frames_dec8c76)
-            elif isinstance(meadow_trace_498c124, meadow_DyldUuidMapA):
-                _name_boundary.attributes(meadow_self_c45a5c6)['insert_image'](meadow_trace_498c124.load_addr, meadow_trace_498c124.uuid)
-            elif isinstance(meadow_trace_498c124, meadow_DyldLaunchExecutable):
-                for meadow_image_a792200 in meadow_trace_498c124.uuid_map_a:
-                    _name_boundary.attributes(meadow_self_c45a5c6)['insert_image'](meadow_image_a792200.load_addr, meadow_image_a792200.uuid)
+    @staticmethod
+    def _check_address(address):
+        if type(address) is not int or not 0 <= address <= 0xffffffffffffffff:
+            raise TraceFormatError('call-stack address must be an unsigned 64-bit integer')
 
-    @_name_boundary.callable_contract({'self': 'meadow_self_e3604d8', 'address': 'meadow_address_1010c9e', 'uuid': 'meadow_uuid_2d1772b'}, 'insert_image')
-    def meadow_insert_image(meadow_self_e3604d8, meadow_address_1010c9e, meadow_uuid_2d1772b):
-        if meadow_address_1010c9e in _name_boundary.attributes(meadow_self_e3604d8)['dyld_addresses']:
+    def _check_tables(self):
+        if len(self.dyld_addresses) != len(self.dyld_uuids):
+            raise TraceFormatError('image address and identifier tables have different lengths')
+        if len(self.dyld_addresses) > self._max_images:
+            raise TraceFormatError('call-stack image limit exceeded')
+
+    def _frame(self, address):
+        self._check_address(address)
+        index = meadow_bisect(self.dyld_addresses, address) - 1
+        if index < 0:
+            return meadow_Frame(address, None, None)
+        return meadow_Frame(address, self.dyld_uuids[index],
+                            address - self.dyld_addresses[index])
+
+    def meadow_feed_generator(self, generator):
+        for index, trace in enumerate(generator):
+            if index >= self._max_traces:
+                raise TraceFormatError('call-stack trace limit exceeded; analysis is incomplete')
+            self._check_tables()
+            if isinstance(trace, meadow_PerfEvent) and trace.cs_frames is not None:
+                if not trace.ktraces:
+                    raise TraceFormatError('sample has no source event')
+                frames = []
+                for address in trace.cs_frames:
+                    if len(frames) >= self._max_frames:
+                        raise TraceFormatError('call-stack frame limit exceeded; analysis is incomplete')
+                    frames.append(self._frame(address))
+                first = trace.ktraces[0]
+                yield meadow_Callstack(first.timestamp, first.tid, frames)
+            elif isinstance(trace, meadow_DyldUuidMapA):
+                self.meadow_insert_image(trace.load_addr, trace.uuid)
+            elif isinstance(trace, meadow_DyldLaunchExecutable):
+                for image_index, image in enumerate(trace.uuid_map_a):
+                    if image_index >= self._max_images:
+                        raise TraceFormatError('launch image list limit exceeded')
+                    self.meadow_insert_image(image.load_addr, image.uuid)
+
+    def meadow_insert_image(self, address, uuid):
+        self._check_address(address)
+        self._check_tables()
+        position = meadow_bisect(self.dyld_addresses, address)
+        if position and self.dyld_addresses[position - 1] == address:
             return
-        meadow_index__fbb5f90 = meadow_bisect(_name_boundary.attributes(meadow_self_e3604d8)['dyld_addresses'], meadow_address_1010c9e)
-        _name_boundary.attributes(meadow_self_e3604d8)['dyld_addresses'].insert(meadow_index__fbb5f90, meadow_address_1010c9e)
-        _name_boundary.attributes(meadow_self_e3604d8)['dyld_uuids'].insert(meadow_index__fbb5f90, meadow_uuid_2d1772b)
+        if len(self.dyld_addresses) >= self._max_images:
+            raise TraceFormatError('call-stack image limit exceeded; analysis is incomplete')
+        self.dyld_addresses.insert(position, address)
+        self.dyld_uuids.insert(position, uuid)
+
 _name_boundary.module_contract(globals(), {'bisect': 'meadow_bisect', 'Frame': 'meadow_Frame', 'CallstacksParser': 'meadow_CallstacksParser', 'Callstack': 'meadow_Callstack', 'DyldLaunchExecutable': 'meadow_DyldLaunchExecutable', 'namedtuple': 'meadow_namedtuple', 'PerfEvent': 'meadow_PerfEvent', 'DyldUuidMapA': 'meadow_DyldUuidMapA'})

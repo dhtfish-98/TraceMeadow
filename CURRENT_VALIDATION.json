@@ -5,12 +5,12 @@
   "upstream_tree": "b291e46563de1d261d54ee9cc4d6364830f2426b",
   "upstream_archive_files_byte_verified": 43,
   "upstream_tests_passed": 69,
-  "current_tests_passed": 435,
+  "current_tests_passed": 459,
   "new_stream_boundary_tests": 356,
-  "equal_upstream_observations": 1073,
+  "equal_upstream_observations": 1173,
   "intentional_checked_error_changes": 60,
   "runtime_python_files_syntax_checked": 20,
-  "scope": "Owned synthetic v2/v3 stream data, retained upstream unit cases and current input/metadata/CLI boundaries. No live tracing, device or complete handler-state proof.",
+  "scope": "Owned synthetic v2/v3 streams, nested/restarted event groups and nearest-image frame queries; retained upstream cases and input/metadata/CLI/aggregation boundaries. No live tracing or complete handler-state proof.",
   "runtime_source_hashes": [
     {
       "path": "src/tracemeadow/__init__.py",
@@ -38,7 +38,7 @@
     },
     {
       "path": "src/tracemeadow/event_stream.py",
-      "sha256": "d70f7ab0119e15cee3c5e0c555d9755b832c822c92630c0baf143fac8847623f"
+      "sha256": "7ce7a19ebeeb652ea6ac1fb2dab662e527ff6fc83aea95241074040a043f4606"
     },
     {
       "path": "src/tracemeadow/handlers/__init__.py",
@@ -78,11 +78,11 @@
     },
     {
       "path": "src/tracemeadow/stack_stream.py",
-      "sha256": "e35fd3b3c81c07251ba1b68194b0fd5bb07cbcc64997f98a11db2389e8c6f2a5"
+      "sha256": "8cfe069bc169bcf6fd50bb79d0a6082eee25d455298d2492008550263923f008"
     },
     {
       "path": "src/tracemeadow/trace_stream.py",
-      "sha256": "853b94de311f54c03e09fb0b9d215723745c5a82b4547fce7c178d3fd9f66dcf"
+      "sha256": "5ac3e11df9ad498e741901cbfb402587ecc49898bc5b66188ea9b1156d38f714"
     },
     {
       "path": "src/tracemeadow_boundary/__init__.py",
@@ -94,8 +94,11 @@
     }
   ],
   "OPEN": [
-    "Retained handler aggregation/state and formatting algorithms are not fully rewritten or universally bounded.",
+    "Other handler-owned maps, large handler catalogs and formatting algorithms are not fully rewritten or universally bounded; unmatched groups at EOF and image extent remain unresolved.",
     "Library callers and continued writers may block reads; byte limits are not wall-clock timeouts.",
     "Current applicant/organization matching and actual CVP safeguards-impact evidence remain unverified."
-  ]
+  ],
+  "release_version": "1.0.3",
+  "new_aggregation_callstack_tests": 24,
+  "successful_aggregation_callstack_comparisons": 100
 }

@@ -10,6 +10,8 @@ from tracemeadow.event_records import meadow_DgbFuncQual as meadow_DgbFuncQual
 from tracemeadow.code_index import meadow_default_trace_codes as meadow_default_trace_codes
 from tracemeadow.trace_stream import meadow_TracesParser as meadow_TracesParser
 from tracemeadow.log_records import meadow_OsLogEvent as meadow_OsLogEvent
+from tracemeadow.bounded_stream import TraceFormatError
+meadow_FORMAT_LIMIT = 16 * 1024 * 1024
 meadow_c_lexer = meadow_lexers.CLexer()
 meadow_color_formatter = meadow_formatters.TerminalTrueColorFormatter(style='stata-dark')
 meadow_DBG_TRACE = 7
@@ -175,8 +177,14 @@ class meadow_PyKdebugParser:
         if _name_boundary.attributes(meadow_self_65958cd)['show_process']:
             meadow_formatted_data_15b9664 += f"{_name_boundary.attributes(meadow_self_65958cd)['_format_process'](meadow_tid_e996b7f):<34}"
         meadow_ret_380af6a = [meadow_formatted_data_15b9664]
+        size = len(meadow_formatted_data_15b9664.encode('utf-8'))
+        if size > meadow_FORMAT_LIMIT:
+            raise TraceFormatError('call-stack formatting byte limit exceeded; report is incomplete')
         for meadow_i_b17031f, meadow_frame_4ae1a04 in enumerate(meadow_callstack_d7b87a5.frames):
             meadow_line_7aaef71 = f'{meadow_frame_4ae1a04.uuid}:0x{meadow_frame_4ae1a04.offset:016x}' if meadow_frame_4ae1a04.uuid is not None else f'0x{meadow_frame_4ae1a04.address:016x}'
+            size += 1 + meadow_i_b17031f + len(meadow_line_7aaef71.encode('utf-8'))
+            if size > meadow_FORMAT_LIMIT:
+                raise TraceFormatError('call-stack formatting byte limit exceeded; report is incomplete')
             meadow_ret_380af6a.append(' ' * meadow_i_b17031f + meadow_line_7aaef71)
         return '\n'.join(meadow_ret_380af6a)
 
