@@ -25,3 +25,5 @@ The GitHub workflow checks out upstream commit `9353b4f0ce1e5d86eeb78d93a500626a
 
 - Real-device live tracing and additional OS/firmware versions: OPEN.
 - Public dataclass/namedtuple event fields, enum identifiers and trace catalog names intentionally remain wire labels.
+
+Release v1.0.1 restores executable file modes and the first-line position of interpreter directives. Distribution metadata now uses derivative release 1.0.1; upstream format/version constants retain their protocol values. No algorithm changes were made.

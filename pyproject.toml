@@ -3,7 +3,7 @@ requires=["setuptools==80.10.2", "wheel==0.48.0"]
 build-backend="setuptools.build_meta"
 [project]
 name="tracemeadow"
-version="1.2.8"
+version="1.0.1"
 description="TraceMeadow attributed derivative for offline developer analysis"
 readme="README.md"
 requires-python=">=3.9"
@@ -20,3 +20,9 @@ where=["src"]
 [tool.pytest.ini_options]
 pythonpath=["src"]
 testpaths=["checks"]
+
+[tool.setuptools.cmdclass]
+build_py="tracemeadow_delivery_build.DeliveryBuild"
+
+[tool.setuptools]
+py-modules=["tracemeadow_delivery_build"]
