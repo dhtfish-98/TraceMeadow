@@ -1,0 +1,101 @@
+{
+  "status": "PASS",
+  "python": "3.12.13",
+  "upstream_commit": "9353b4f0ce1e5d86eeb78d93a500626a5385c109",
+  "upstream_tree": "b291e46563de1d261d54ee9cc4d6364830f2426b",
+  "upstream_archive_files_byte_verified": 43,
+  "upstream_tests_passed": 69,
+  "current_tests_passed": 435,
+  "new_stream_boundary_tests": 356,
+  "equal_upstream_observations": 1073,
+  "intentional_checked_error_changes": 60,
+  "runtime_python_files_syntax_checked": 20,
+  "scope": "Owned synthetic v2/v3 stream data, retained upstream unit cases and current input/metadata/CLI boundaries. No live tracing, device or complete handler-state proof.",
+  "runtime_source_hashes": [
+    {
+      "path": "src/tracemeadow/__init__.py",
+      "sha256": "bdfcd5ccd0fa32947ad1931b647cb22b6f969f78b1e813d00bb9a25db9c3658c"
+    },
+    {
+      "path": "src/tracemeadow/binary_stream.py",
+      "sha256": "66ccbd1996861fbb89a47e936299f51aed000ee37b0ee6ddf76ebd99f7394302"
+    },
+    {
+      "path": "src/tracemeadow/bounded_stream.py",
+      "sha256": "75718158ead13ce270a2010c203a9147e21c8fbf3504e3fee455c01c2dc5226f"
+    },
+    {
+      "path": "src/tracemeadow/code_index.py",
+      "sha256": "a11197daa3789f69707621ca101abd18cc18d284eaa085277c20562790338983"
+    },
+    {
+      "path": "src/tracemeadow/console.py",
+      "sha256": "cdfa92344adf79f41ba184dcab79a532440851a4d617051397a411d51a7db2ed"
+    },
+    {
+      "path": "src/tracemeadow/event_records.py",
+      "sha256": "11cff6855b6f2fd41515786e89707358bdbb2e8d0d073e45f0a86a7b89e388a6"
+    },
+    {
+      "path": "src/tracemeadow/event_stream.py",
+      "sha256": "d70f7ab0119e15cee3c5e0c555d9755b832c822c92630c0baf143fac8847623f"
+    },
+    {
+      "path": "src/tracemeadow/handlers/__init__.py",
+      "sha256": "6d56812512fefe892df1fa43bb0264bf0bb66ac3e71f33cdc426ede86f735ad1"
+    },
+    {
+      "path": "src/tracemeadow/handlers/file_events.py",
+      "sha256": "f9ff211e896d5de48a0941b01a110fdb3f340f477c4fd8dedf56616f854f0e38"
+    },
+    {
+      "path": "src/tracemeadow/handlers/image_events.py",
+      "sha256": "6caf231a83b076ffcd56482906e15309f47d3c68d52b497a6b970f64425e5126"
+    },
+    {
+      "path": "src/tracemeadow/handlers/kernel_calls.py",
+      "sha256": "599a5a2a0d14c7f1051723f21796b57b04deebde8047edc6d022d08491aae690"
+    },
+    {
+      "path": "src/tracemeadow/handlers/lifecycle_events.py",
+      "sha256": "f65dccda6001425cb2eaeaddc0979ab76708224661f92a910f4e9462f11f482f"
+    },
+    {
+      "path": "src/tracemeadow/handlers/performance_events.py",
+      "sha256": "43ce708f2ab717bf38627013250a7dc0c0cd23b0c99cf759b5824fdd6f82630a"
+    },
+    {
+      "path": "src/tracemeadow/handlers/priority_events.py",
+      "sha256": "918a7860bff013c423d9cc2525d95783c4cf862c305af97807778ef76d9470a8"
+    },
+    {
+      "path": "src/tracemeadow/handlers/unix_calls.py",
+      "sha256": "c90064bb02a0a20c2171eff4646669673d17897e562a7aa40e15dfdeabae0a23"
+    },
+    {
+      "path": "src/tracemeadow/log_records.py",
+      "sha256": "b5ab1007fa0e7871b1b7e947a5145b2a9f2a88a79f46e19cdd39e7c3a7c178f6"
+    },
+    {
+      "path": "src/tracemeadow/stack_stream.py",
+      "sha256": "e35fd3b3c81c07251ba1b68194b0fd5bb07cbcc64997f98a11db2389e8c6f2a5"
+    },
+    {
+      "path": "src/tracemeadow/trace_stream.py",
+      "sha256": "853b94de311f54c03e09fb0b9d215723745c5a82b4547fce7c178d3fd9f66dcf"
+    },
+    {
+      "path": "src/tracemeadow_boundary/__init__.py",
+      "sha256": "f1e28c86dcf73a19a5260e4f5f6f2c5e3e62566f114c1fba936fd042300a8f37"
+    },
+    {
+      "path": "src/tracemeadow_delivery_build.py",
+      "sha256": "dfced05a75779c38d5afabd4351855f3d8e0454283b1e07f4adfb528f47ef339"
+    }
+  ],
+  "OPEN": [
+    "Retained handler aggregation/state and formatting algorithms are not fully rewritten or universally bounded.",
+    "Library callers and continued writers may block reads; byte limits are not wall-clock timeouts.",
+    "Current applicant/organization matching and actual CVP safeguards-impact evidence remain unverified."
+  ]
+}

@@ -20,7 +20,9 @@ meadow_DBG_BSD = 4
 class meadow_PyKdebugParser:
 
     @_name_boundary.callable_contract({'self': 'meadow_self_c6be574'}, '__init__')
-    def __init__(meadow_self_c6be574):
+    def __init__(meadow_self_c6be574, *, v2_padding=0, limits=None):
+        meadow_self_c6be574._meadow_v2_padding = v2_padding
+        meadow_self_c6be574._meadow_limits = limits
         _name_boundary.attributes(meadow_self_c6be574)['filter_tid'] = None
         _name_boundary.attributes(meadow_self_c6be574)['filter_process'] = None
         _name_boundary.attributes(meadow_self_c6be574)['filter_class'] = []
@@ -44,7 +46,7 @@ class meadow_PyKdebugParser:
 
     @_name_boundary.callable_contract({'self': 'meadow_self_79130e4', 'kdebug': 'meadow_kdebug_8b9e275'}, 'kevents')
     def meadow_kevents(meadow_self_79130e4, meadow_kdebug_8b9e275: meadow_io.IOBase):
-        meadow_events_generator_635d4b8 = _name_boundary.attributes(meadow_KdBufParser(_name_boundary.attributes(meadow_self_79130e4)['threads_pids'], _name_boundary.attributes(meadow_self_79130e4)['pids_names']))['parse'](meadow_kdebug_8b9e275)
+        meadow_events_generator_635d4b8 = _name_boundary.attributes(meadow_KdBufParser(_name_boundary.attributes(meadow_self_79130e4)['threads_pids'], _name_boundary.attributes(meadow_self_79130e4)['pids_names'], v2_padding=meadow_self_79130e4._meadow_v2_padding, limits=meadow_self_79130e4._meadow_limits))['parse'](meadow_kdebug_8b9e275)
         meadow_events_generator_635d4b8 = filter(lambda meadow_e_38680e2: not isinstance(meadow_e_38680e2, meadow_OsLogEvent), meadow_events_generator_635d4b8)
         if _name_boundary.attributes(meadow_self_79130e4)['filter_tid'] is not None:
             meadow_events_generator_635d4b8 = filter(lambda meadow_e_5192565: meadow_e_5192565.tid == _name_boundary.attributes(meadow_self_79130e4)['filter_tid'], meadow_events_generator_635d4b8)
@@ -93,7 +95,7 @@ class meadow_PyKdebugParser:
 
     @_name_boundary.callable_contract({'self': 'meadow_self_43697e1', 'kdebug': 'meadow_kdebug_2442e28'}, 'os_log_events')
     def meadow_os_log_events(meadow_self_43697e1, meadow_kdebug_2442e28: meadow_io.IOBase):
-        meadow_events_generator_0c80764 = _name_boundary.attributes(meadow_KdBufParser(_name_boundary.attributes(meadow_self_43697e1)['threads_pids'], _name_boundary.attributes(meadow_self_43697e1)['pids_names']))['parse'](meadow_kdebug_2442e28)
+        meadow_events_generator_0c80764 = _name_boundary.attributes(meadow_KdBufParser(_name_boundary.attributes(meadow_self_43697e1)['threads_pids'], _name_boundary.attributes(meadow_self_43697e1)['pids_names'], v2_padding=meadow_self_43697e1._meadow_v2_padding, limits=meadow_self_43697e1._meadow_limits))['parse'](meadow_kdebug_2442e28)
         meadow_events_generator_0c80764 = filter(lambda meadow_e_9008c46: isinstance(meadow_e_9008c46, meadow_OsLogEvent), meadow_events_generator_0c80764)
         if _name_boundary.attributes(meadow_self_43697e1)['filter_tid'] is not None:
             meadow_events_generator_0c80764 = filter(lambda meadow_e_ab65148: meadow_e_ab65148.thread_identifier == _name_boundary.attributes(meadow_self_43697e1)['filter_tid'], meadow_events_generator_0c80764)
