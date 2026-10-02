@@ -1,5 +1,7 @@
 # TraceMeadow
 
+防御用途、实际能力及本轮验证范围见 [DEFENSIVE_SCOPE.md](DEFENSIVE_SCOPE.md)。
+
 An attributed derivative of **pykdebugparser**, retaining the upstream behavior while reorganizing Python modules and implementation bindings. See [ORIGIN.md](ORIGIN.md) for source, copyright and licensing.
 
 TraceMeadow parses Darwin kdebug event buffers, trace headers, system-call traces, loaded-image events, sampled call stacks and OS log records. It provides the existing kevents, traces, callstacks, images, kexts, logs and processes commands. Binary streaming, event records, code catalogs and trace handlers are separate modules.
