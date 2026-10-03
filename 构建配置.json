@@ -1,0 +1,35 @@
+{
+  "schema": "project-build-layout.v1",
+  "project": "TraceMeadow",
+  "author": "dhtfish98",
+  "kind": "python",
+  "base_public_commit": "5fa339ca3200f454b554cd0ced0c899cd16959ac",
+  "restored_inputs": [
+    {
+      "original": "DEFENSIVE_SCOPE.md",
+      "stored": "项目文档/DEFENSIVE_SCOPE.md",
+      "sha256": "ee8597a3ae6666621281caffb69a90ec36444ef3a67dc21bdf19aae2c87ff2db"
+    },
+    {
+      "original": "LICENSE",
+      "stored": "项目文档/LICENSE",
+      "sha256": "2a365760ffc2198cc34ed55f7313d3eb094646840a1cf489bb4be1e79ff6412a"
+    },
+    {
+      "original": "ORIGIN.md",
+      "stored": "项目文档/ORIGIN.md",
+      "sha256": "0c8e729e835d8c156b9464b79d3acd262f8c3fe24bfd27a3fd44d24cdc726195"
+    },
+    {
+      "original": "README.md",
+      "stored": "项目文档/README.md",
+      "sha256": "1b34fa6f5e9507c50aada36348dec448e3ebdac8a3c45cd40ef27e46b97330e4"
+    },
+    {
+      "original": "VALIDATION.md",
+      "stored": "项目文档/VALIDATION.md",
+      "sha256": "186b2cb5057d78e80f5ff1d50a22abc7c35f7dd9043fa5d6a1b5e0583272c992"
+    }
+  ],
+  "platform_entries": []
+}

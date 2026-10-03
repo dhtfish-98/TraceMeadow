@@ -1,8 +1,10 @@
+> 目录已整理：文档在「项目文档」，构建、缓存与暂存输入在「Build」。从仓库根目录运行 `python3 构建.py --build`；如需使用本文原有源码命令，先运行 `python3 构建.py --stage --ci`，再进入 `Build/源码`。暂存会恢复原输入路径。现有版本和历史验证记录按各自提交理解。
+
 # TraceMeadow
 
-防御用途、实际能力及本轮验证范围见 [DEFENSIVE_SCOPE.md](DEFENSIVE_SCOPE.md)。
+防御用途、实际能力及本轮验证范围见 [DEFENSIVE_SCOPE.md](<DEFENSIVE_SCOPE.md>)。
 
-An attributed derivative of **pykdebugparser** for authorized, offline trace analysis. Release 1.0.2 rewrites the input reader, v2/v3 record framing, metadata validation, trace-code loading and CLI consumption. See [ORIGIN.md](ORIGIN.md) for source, copyright and licensing.
+An attributed derivative of **pykdebugparser** for authorized, offline trace analysis. Release 1.0.2 rewrites the input reader, v2/v3 record framing, metadata validation, trace-code loading and CLI consumption. See [ORIGIN.md](<ORIGIN.md>) for source, copyright and licensing.
 
 TraceMeadow parses Darwin kdebug event buffers, trace headers, system-call traces, loaded-image events, sampled call stacks and OS log records. It provides the existing kevents, traces, callstacks, images, kexts, logs and processes commands. Binary streaming, event records, code catalogs and trace handlers are separate modules.
 
@@ -25,7 +27,7 @@ python -m build
 
 New implementation names are listed in `SYMBOL_MAP.json`, and module/file mappings in `FILE_MAP.json`. External data labels and public compatibility aliases are kept at an explicit adapter boundary. The `guides` directory contains clearly attributed historical upstream documentation; its original commands refer to the upstream project.
 
-See [VALIDATION.md](VALIDATION.md) for measured checks and remaining environmental limits.
+See [VALIDATION.md](<VALIDATION.md>) for measured checks and remaining environmental limits.
 
 ## Compare with upstream
 
