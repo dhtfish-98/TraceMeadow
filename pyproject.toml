@@ -29,4 +29,4 @@ license-files = ["项目文档/LICENSE"]
 py-modules=["tracemeadow_delivery_build"]
 
 [tool.setuptools.data-files]
-"share/tracemeadow"=["项目文档/ORIGIN.md", "项目文档/DEFENSIVE_SCOPE.md", "项目文档/VALIDATION.md", "CURRENT_VALIDATION.json"]
+"share/tracemeadow"=["项目文档/ORIGIN.md", "项目文档/DEFENSIVE_SCOPE.md", "项目文档/VALIDATION.md", "项目文档/CURRENT_VALIDATION.json"]
