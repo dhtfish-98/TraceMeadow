@@ -29,7 +29,7 @@
   "tests/traces/test_trace.py": "checks/test_meadow_trace.py",
   "tests/traces/test_turnstile.py": "checks/test_meadow_turnstile.py",
   "LICENSE": "LICENSE",
-  "gifs/filtering_open.gif": "guides/upstream_filtering_open.gif",
-  "gifs/usage_with_ktrace.gif": "guides/upstream_usage_with_ktrace.gif",
+  "gifs/filtering_open.gif": "项目文档/guides/upstream_filtering_open.gif",
+  "gifs/usage_with_ktrace.gif": "项目文档/guides/upstream_usage_with_ktrace.gif",
   "pykdebugparser/trace.codes": "src/tracemeadow/trace.codes"
 }

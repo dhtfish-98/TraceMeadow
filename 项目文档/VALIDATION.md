@@ -1,5 +1,9 @@
 # Validation
 
+## 1.0.4 document-layout validation — 2026-10-05
+
+Two historical upstream guide GIFs moved byte-for-byte from root `guides/` to `项目文档/guides/`. `FILE_MAP.json` now resolves to the tracked canonical locations. Runtime source and upstream license bytes are unchanged. Local Python 3.14.6 check: 459/459 project tests pass. Package and publication checks for this version are recorded separately from the 1.0.3 evidence below.
+
 Local validation: 2026-10-02 (Asia/Tokyo), Python 3.12.13, derivative release 1.0.3. Machine-readable runtime hashes and scope are in [CURRENT_VALIDATION.json](CURRENT_VALIDATION.json).
 
 - Current tests: **459 passed**, including 356 stream, metadata, resource and CLI boundary cases plus 24 new aggregation/call-stack cases and the 79 retained derivative tests.

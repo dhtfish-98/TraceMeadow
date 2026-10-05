@@ -3,7 +3,8 @@ requires=["setuptools==80.10.2", "wheel==0.48.0"]
 build-backend="setuptools.build_meta"
 [project]
 name="tracemeadow"
-version="1.0.3"
+version="1.0.4"
+authors=[{name="dhtfish98"}]
 description="TraceMeadow attributed derivative for offline developer analysis"
 readme="项目文档/README.md"
 requires-python=">=3.9"

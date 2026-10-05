@@ -98,7 +98,16 @@
     "Library callers and continued writers may block reads; byte limits are not wall-clock timeouts.",
     "Current applicant/organization matching and actual CVP safeguards-impact evidence remain unverified."
   ],
-  "release_version": "1.0.3",
+  "release_version": "1.0.4",
   "new_aggregation_callstack_tests": 24,
-  "successful_aggregation_callstack_comparisons": 100
+  "successful_aggregation_callstack_comparisons": 100,
+  "historical_runtime_measurements_version": "1.0.3",
+  "layout_only_1_0_4": {
+    "moved_historical_guide_gifs": 2,
+    "moved_byte_identical": true,
+    "runtime_source_changed": false,
+    "local_python": "3.14.6",
+    "local_tests_passed": 459,
+    "remote_ci": "OPEN until exact commit run"
+  }
 }

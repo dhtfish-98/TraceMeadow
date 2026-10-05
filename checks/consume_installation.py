@@ -16,7 +16,7 @@ from tracemeadow.bounded_stream import TraceFormatError
 
 location = Path(tracemeadow.__file__).resolve()
 assert 'site-packages' in location.parts, location
-assert importlib.metadata.version('tracemeadow') == '1.0.3'
+assert importlib.metadata.version('tracemeadow') == '1.0.4'
 record = meadow_from_kd_buf(bytes([255]) * 64)
 assert record.eventid == 0xfffffffc and record.func_qualifier == 3
 assert repr(record).startswith('Kevent(') and meadow_default_trace_codes()

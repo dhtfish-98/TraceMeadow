@@ -57,3 +57,7 @@ Call-stack defaults limit each sample to 65,536 frames, image tables to 65,536 e
 These limits bound the new group storage and call-stack operations. They do not fully bound other handler-owned maps, caller mutations, all formatting operations or unmatched groups at EOF. Unmatched ends and replacement of an existing same-ID start retain the documented upstream convention. A stream can still contain unresolved groups; successfully exhausting the group iterator is not proof of a complete capture.
 
 Call-stack formatting checks its 16 MiB UTF-8 budget before allocating each indented frame line. This prevents large bounded samples from materializing quadratic-size indentation before the CLI can check output. Other formatters remain within the stated unfinished scope.
+
+## 1.0.4 document layout
+
+The two historical upstream guide GIFs are retained byte-for-byte under `项目文档/guides/`. The trace parser and command behavior are unchanged; upstream copyright and MIT license notices remain.
